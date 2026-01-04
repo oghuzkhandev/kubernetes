@@ -1,12 +1,9 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: synergychat-crawler
-  labels:
-    app: synergychat-crawler
+  namespace: crawler
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: synergychat-crawler
@@ -16,8 +13,17 @@ spec:
         app: synergychat-crawler
     spec:
       containers:
-        - name: synergychat-crawler
-          image: bootdotdev/synergychat-crawler:latest
+        - name: crawler
+          image: docker.io/bootdotdev/synergychat-crawler:latest
           envFrom:
             - configMapRef:
                 name: synergychat-crawler-configmap
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
