@@ -1,0 +1,17 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: web-ratelimit
+  namespace: default
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: web-httproute
+  rateLimit:
+    type: Local
+    local:
+      rules:
+        - limit:
+            requests: 30
+            unit: Second
